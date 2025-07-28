@@ -22,6 +22,41 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
+        String tokenHeader = request.getHeader(JWTCreator.HEADER_AUTHORIZATION);
+
+        try {
+            if(tokenHeader!=null && tokenHeader.startsWith(SecurityConfig.PREFIX)) {
+                JWTObject tokenObject = JWTCreator.create(tokenHeader,SecurityConfig.PREFIX, SecurityConfig.KEY);
+
+                List<SimpleGrantedAuthority> authorities = authorities(tokenObject.getRoles());
+
+                UsernamePasswordAuthenticationToken userToken =
+                        new UsernamePasswordAuthenticationToken(
+                                tokenObject.getSubject(),
+                                null,
+                                authorities);
+
+                SecurityContextHolder.getContext().setAuthentication(userToken);
+
+            }else {
+                SecurityContextHolder.clearContext();
+            }
+            filterChain.doFilter(request, response);
+        }catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException e) {
+            e.printStackTrace();
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            return;
+        }
+    }
+    private List<SimpleGrantedAuthority> authorities(List<String> roles){
+        return roles.stream().map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    /* @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         //obtem o token da request com AUTHORIZATION
         String token =  request.getHeader(JWTCreator.HEADER_AUTHORIZATION);
         //esta implementação só esta validando a integridade do token
@@ -49,9 +84,7 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
     }
-    private List<SimpleGrantedAuthority> authorities(List<String> roles){
-        return roles.stream().map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-    }
+
+     */
 }
 
