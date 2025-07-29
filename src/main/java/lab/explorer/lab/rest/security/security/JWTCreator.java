@@ -20,7 +20,7 @@ public class JWTCreator {
                 .setIssuedAt(jwtObject.getIssuedAt())
                 .setExpiration(jwtObject.getExpiration())
                 .claim(ROLES_AUTHORITIES, checkRoles(jwtObject.getRoles()))
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
         return prefix + " " + token;
