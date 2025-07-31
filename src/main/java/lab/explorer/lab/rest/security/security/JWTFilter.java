@@ -27,7 +27,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
         try {
             if(tokenHeader!=null && tokenHeader.startsWith(SecurityConfig.PREFIX)) {
-                JWTObject tokenObject = JWTCreator.create(tokenHeader,SecurityConfig.PREFIX, SecurityConfig.KEY);
+                JWTObject tokenObject = JWTCreator.read(tokenHeader,SecurityConfig.PREFIX, SecurityConfig.KEY);
 
                 List<SimpleGrantedAuthority> authorities = authorities(tokenObject.getRoles());
 
