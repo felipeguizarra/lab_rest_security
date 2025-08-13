@@ -9,13 +9,14 @@ import lab.explorer.lab.rest.security.security.JWTObject;
 import lab.explorer.lab.rest.security.security.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
+
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
+@RequestMapping("/login")
 public class LoginController {
     @Autowired
     private PasswordEncoder encoder;
@@ -24,7 +25,7 @@ public class LoginController {
     @Autowired
     private UserRepository repository;
 
-    @PostMapping("/login")
+    @PostMapping
     public Sessao logar(@RequestBody Login login){
         User user = repository.findByUsername(login.getUsername());
         if(user!=null) {
