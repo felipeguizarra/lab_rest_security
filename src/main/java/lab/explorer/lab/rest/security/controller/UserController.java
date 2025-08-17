@@ -1,6 +1,7 @@
 package lab.explorer.lab.rest.security.controller;
 
 import lab.explorer.lab.rest.security.Service.UserService;
+import lab.explorer.lab.rest.security.dtos.UserDTO;
 import lab.explorer.lab.rest.security.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,11 @@ public class UserController {
         service.createUser(user);
     }
     @GetMapping
-    public ResponseEntity<List<User>> listaUsuarios() {
-        return ResponseEntity.ok(service.listarUsuarios());
+    public ResponseEntity<List<UserDTO>> listaUsuarios() {
+        List<UserDTO> users = service.listarUsuarios()
+            .stream()
+            .map(u -> new UserDTO(u.getId(), u.getName(), u.getUsername(), u.getRoles()))
+            .toList();
+        return ResponseEntity.ok(users);
     }
 }
