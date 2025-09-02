@@ -1,5 +1,7 @@
 package lab.explorer.lab.rest.security.dtos;
 
+import lab.explorer.lab.rest.security.model.User;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,13 @@ public class UserDTO {
         this.name = name;
         this.username = username;
         this.roles = roles;
+    }
+
+    public UserDTO(User user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.username = user.getUsername();
+        this.roles = user.getRoles();
     }
 
     public Integer getId() {

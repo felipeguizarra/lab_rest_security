@@ -1,5 +1,6 @@
 package lab.explorer.lab.rest.security.Service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import lab.explorer.lab.rest.security.repository.UserRepository;
 
 import lab.explorer.lab.rest.security.Service.UserService;
@@ -28,5 +29,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> listarUsuarios() {
         return repository.findAll();
+    }
+
+    @Override
+    public User updateUser(User user) {
+        User usuarioExistente = repository.findById(user.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+
+        usuarioExistente.setName(user.getName());
+        usuarioExistente.setName(user.getName());
+        usuarioExistente.setUsername(user.getUsername());
+        usuarioExistente.setRoles(user.getRoles());
+
+        usuarioExistente.setPassword(encoder.encode(user.getPassword()));
+
+        return repository.save(usuarioExistente);
     }
 }

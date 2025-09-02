@@ -8,4 +8,7 @@ public interface UserService {
     void createUser(User user);
 
     List<User> listarUsuarios();
+
+    User updateUser(User user);
+
 }
