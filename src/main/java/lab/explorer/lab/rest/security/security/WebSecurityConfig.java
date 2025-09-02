@@ -12,7 +12,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.h2.server.web.WebServlet;
 
 @Configuration
 @EnableWebSecurity
@@ -42,10 +41,10 @@ public class WebSecurityConfig {
                 .addFilterAfter(new JWTFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
-                        .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users").hasAnyRole("USERS", "MANAGERS")
+                        .requestMatchers(HttpMethod.POST, "/users").hasAnyRole( "MANAGERS")
+                        .requestMatchers(HttpMethod.PUT, "/users").hasAnyRole( "MANAGERS")
+                        .requestMatchers(HttpMethod.GET, "/users").hasAnyRole( "MANAGERS")
                         .requestMatchers("/managers").hasAnyRole("MANAGERS")
                         .anyRequest().authenticated()
                 )
