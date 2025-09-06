@@ -45,4 +45,11 @@ public class UserServiceImpl implements UserService {
 
         return repository.save(usuarioExistente);
     }
+
+    @Override
+    public void deleteUser(Integer id) {
+        User usuarioADeletar = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario não encontrado"));
+        repository.delete(usuarioADeletar);
+    }
 }

@@ -33,4 +33,9 @@ public class UserController {
         UserDTO u = new UserDTO(service.updateUser(user));
         return ResponseEntity.ok(u);
     }
+
+    @DeleteMapping("/{id}")
+    public void deletaUsuario(@PathVariable Integer id){
+        service.
+    }
 }
